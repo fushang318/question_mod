@@ -27,29 +27,11 @@ module QuestionMod
 
       def vote_created
         user = self.voteable.creator
-        
+
         if self.kind == KIND_UP
           change_vote_sum 1
-
-          if self.voteable_type == "QuestionMod::Answer"
-            user.notifications.create(:kind => "question", :info => {:str1 => "您在问题", :question_title => self.voteable.question.title, :str2 => "的回答获得了一次赞", :question_id => self.voteable.question.id})
-          end
-
-          if self.voteable_type == "QuestionMod::Question"
-            user.notifications.create(:kind => "question", :info => {:str1 => "您的问题", :question_title => self.voteable.title, :str2 => "获得了一次赞", :question_id => self.voteable.id})
-          end
-
         elsif self.kind == KIND_DOWN
           change_vote_sum -1
-
-          if self.voteable_type == "QuestionMod::Answer"
-            user.notifications.create(:kind => "question", :info => {:str1 => "您在问题", :question_title => self.voteable.question.title, :str2 => "的回答获得了一次踩", :question_id => self.voteable.question.id})
-          end
-
-          if self.voteable_type == "QuestionMod::Question" 
-            user.notifications.create(:kind => "question", :info => {:str1 => "您的问题", :question_title => self.voteable.title, :str2 => "获得了一次踩", :question_id => self.voteable.id})
-          end
-          
         end 
       end
 
@@ -59,7 +41,7 @@ module QuestionMod
           change_vote_sum -2
         elsif kinds == [KIND_DOWN,KIND_UP]
           change_vote_sum 2
-        end 
+        end
       end
 
       def destroy_vote
@@ -68,6 +50,6 @@ module QuestionMod
         elsif self.kind == KIND_DOWN
           change_vote_sum 1
         end
-      end  
+      end
   end
 end

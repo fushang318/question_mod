@@ -2,7 +2,7 @@
 .comment-content.hidden
   %ul.comments
     - answer.comments.each do |comment|
-      = render :partial => "/question_mod/question_comments/comment_li", :locals => {:comment => comment}
+      = render :partial => "/question_comments/comment_li", :locals => {:comment => comment}
 
   .form{:data => {:"answer-id" => answer.id.to_s}}
     %textarea.form-control

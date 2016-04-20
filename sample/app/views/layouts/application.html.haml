@@ -6,20 +6,17 @@
 
     %title rails engine: question_mod
     = csrf_meta_tags
-    = stylesheet_link_tag 'question_mod/application', :media => 'screen'
-    = javascript_include_tag 'question_mod/application'
+    = stylesheet_link_tag 'application', :media => 'screen'
+    = javascript_include_tag 'application'
 
   %body
     %nav.navbar.navbar-inverse
       .container
         .navbar-header
           - if current_user != nil
-            %a.navbar-brand 
+            %a.navbar-brand
               已登录用户
               = current_user.name
-            %ul.nav.navbar-nav.navbar-right
-              %li
-                %a{:href => notifications_path, :data => {:method => :get}} 查看通知
         %ul.nav.navbar-nav.navbar-right
           %li
             %a{:href => questions_path, :data => {:method => :get}} 首页

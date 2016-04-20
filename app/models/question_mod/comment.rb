@@ -20,20 +20,16 @@ module QuestionMod
         if self.targetable_type == "QuestionMod::Question"
           if self.reply_comment == nil
             user = self.targetable.creator
-            user.notifications.create(:kind => "question", :info => {:str1 => "您的问题", :question_title => self.targetable.title, :str2 => "收到一个新的评论", :question_id => self.targetable.id})
           else
             user = self.reply_comment.creator
-            user.notifications.create(:kind => "question", :info => {:str1 => "您在问题", :question_title => self.targetable.title, :str2 => "下的评论收到一个新的回复", :question_id => self.targetable.id})
           end
         end
 
-        if self.targetable_type == "QuestionMod::Answer"  
+        if self.targetable_type == "QuestionMod::Answer"
           if self.reply_comment.blank?
             user = self.targetable.creator
-            user.notifications.create(:kind => "question", :info => {:str1 => "您在问题", :question_title => self.targetable.question.title, :str2 => "下的回答收到一个新的评论", :question_id => self.targetable.question.id})
           else
             user = self.reply_comment.creator
-            user.notifications.create(:kind => "question", :info => {:str1 => "您在问题", :question_title => self.targetable.question.title, :str2 => "下的评论收到一个新的回复", :question_id => self.targetable.question.id})
           end
         end
       end

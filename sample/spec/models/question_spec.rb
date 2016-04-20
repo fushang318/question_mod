@@ -7,14 +7,14 @@ RSpec.describe QuestionMod::Question, type: :model do
     }
 
     it "测试问题字段完全通过校验" do
-      question = @user1.questions.create(:title => "hgh", :content => "dgfg")
+      question = @user1.created_questions.create(:title => "hgh", :content => "dgfg")
       expect(question).to be_valid
     end
 
     it "测试创建问题成功" do
       expect{
-        @user1.questions.create(:title => "hgh", :content => "dgfg")
-      }.to change{@user1.questions.count}.by(1)
+        @user1.created_questions.create(:title => "hgh", :content => "dgfg")
+      }.to change{@user1.created_questions.count}.by(1)
     end
   end
 end
