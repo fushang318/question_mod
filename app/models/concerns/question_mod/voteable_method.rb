@@ -2,6 +2,14 @@ module QuestionMod
   module VoteableMethod
     extend ActiveSupport::Concern
 
+    included do
+      # 统计 所有 AnswerVote 的值总和
+      # up +1
+      # down -1
+      field :vote_sum, :type => Integer, :default => 0
+      has_many :votes,   :class_name => 'QuestionMod::Vote', :as => :voteable
+    end
+
    # 有三种起始状态
     # 1 用户没有任何对应 vote
     # 2 用户已经是 vote_up
@@ -18,17 +26,17 @@ module QuestionMod
       _vote_by(user, Vote::KIND_DOWN, Vote::KIND_UP)
     end
 
-    def _vote_by(user, kind1, kind2)
+    def _vote_by(user, add_kind, remove_kind)
       current_kind = vote_state_of(user)
 
       case current_kind
       when nil
-        votes.create(:kind => kind1, :creator => user)
-      when kind1
+        votes.create(:kind => add_kind, :creator => user)
+      when add_kind
         votes.where(:creator => user).destroy_all
-      when kind2
+      when remove_kind
         vote = votes.where(:creator => user).first
-        vote.update_attribute(:kind, kind1)
+        vote.update_attribute(:kind, add_kind)
       end
     end
 
@@ -37,11 +45,7 @@ module QuestionMod
     # AnswerVote::KIND_DOWN
     # nil
     def vote_state_of(user)
-      if votes.where(:creator => user).all.first == nil
-        return nil
-      else
-        return votes.where(:creator => user).all.first.kind
-      end
+      votes.where(:creator => user).all.first.try(:kind)
     end
 
     def is_vote_up_of(user)

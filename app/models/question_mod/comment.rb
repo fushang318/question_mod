@@ -5,8 +5,6 @@ module QuestionMod
 
     field :content, :type => String
 
-    after_create :comment_created
-
     validates :content, :presence => true
     validates :creator, :presence => true
 
@@ -15,23 +13,12 @@ module QuestionMod
 
     belongs_to :reply_comment, :class_name => "QuestionMod::Comment"
 
-    private
-      def comment_created
-        if self.targetable_type == "QuestionMod::Question"
-          if self.reply_comment == nil
-            user = self.targetable.creator
-          else
-            user = self.reply_comment.creator
-          end
-        end
+    module CommentAbleMethods
+      extend ActiveSupport::Concern
 
-        if self.targetable_type == "QuestionMod::Answer"
-          if self.reply_comment.blank?
-            user = self.targetable.creator
-          else
-            user = self.reply_comment.creator
-          end
-        end
+      included do
+        has_many :comments, :class_name => 'QuestionMod::Comment', :as => :targetable
       end
+    end
   end
 end
