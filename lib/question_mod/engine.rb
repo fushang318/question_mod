@@ -11,12 +11,10 @@ module QuestionMod
       User.class_eval do
         has_many :created_questions, class_name: 'QuestionMod::Question'
         has_many :answers, class_name: 'QuestionMod::Answer'
-        has_many :comments, class_name: 'QuestionMod::Comment'
-        has_many :votes, class_name: 'QuestionMod::Vote'
 
         def answered_questions
           question_ids = self.answers.map do |answer|
-            answer.question.id 
+            answer.question_id
           end.compact.uniq
 
           QuestionMod::Question.where(:_id.in => question_ids)
